@@ -27,9 +27,13 @@ namespace ProjectApp.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //ordering does not important here:
+            //add objs in here so controller will be ready to inject
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddCors();
+            services.AddScoped<IAuthRepository, AuthRepository>(); //scoped created one instenace per http request. singleton or transient doesn't suit here.
+
 
         }
 

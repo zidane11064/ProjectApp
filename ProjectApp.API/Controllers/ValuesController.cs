@@ -10,7 +10,7 @@ namespace ProjectApp.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class ValuesController : ControllerBase //use controllerbase rather than controller is b/c controllerbase doesnt support view. For this project, view will come from Angular.
     {
         private readonly DataContext _context;
         public ValuesController(DataContext context)
