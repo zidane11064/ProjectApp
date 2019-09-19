@@ -42,7 +42,6 @@ namespace ProjectApp.API.Controllers
 
             var createdUser = await _repo.Register(userToCreate, userToRegisterDto.Password); 
                 return StatusCode (201);
-        
         }
 
         [HttpPost("login")]
@@ -77,8 +76,6 @@ namespace ProjectApp.API.Controllers
             return Ok(new {
                 token = tokenHandler.WriteToken(token)    
             });
-
-
         }
     }
 }

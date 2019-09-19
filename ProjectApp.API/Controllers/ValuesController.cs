@@ -20,6 +20,8 @@ namespace ProjectApp.API.Controllers
             _context = context;
 
         }
+
+        [AllowAnonymous]
         // GET api/values
         [HttpGet]
         public async Task<IActionResult> GetValues()
@@ -28,6 +30,7 @@ namespace ProjectApp.API.Controllers
             return Ok(values);
         }
 
+        [AllowAnonymous]
         // GET api/values/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetValues(int id)
