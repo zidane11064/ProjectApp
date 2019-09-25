@@ -19,6 +19,7 @@ using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using ProjectApp.API.Helpers;
+using AutoMapper;
 
 namespace ProjectApp.API
 {
@@ -37,9 +38,15 @@ namespace ProjectApp.API
             //ordering does not important here:
             //add objs in here so controller will be ready to inject
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+                .AddJsonOptions(opt => {
+                    opt.SerializerSettings.ReferenceLoopHandling = 
+                        Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
+            services.AddAutoMapper(typeof(ProjectRepository).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>(); //scoped created one instenace per http request. singleton or transient doesn't suit here.
+            services.AddScoped<IProjectRepository, ProjectRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options => {options.TokenValidationParameters = new TokenValidationParameters{
                             ValidateIssuerSigningKey = true,
