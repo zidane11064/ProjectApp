@@ -19,7 +19,7 @@ namespace ProjectApp.API
                 try
                 {
                     var context = services.GetRequiredService<DataContext>();
-                    context.Database.Migrate();
+                    context.Database.Migrate(); //dont have to type "dotnet ef database update", still need to prepare migration first
                     Seed.SeedUsers(context);
                 }
                 catch (Exception ex)
