@@ -29,4 +29,8 @@ import { User } from '../_model/user';
     return this.http.post(this.baseUrl + 'user/' + userId + '/photos/' + id + '/setMain', {});
   }
 
+  deletePhoto(userId: number, id: number) {
+    return this.http.delete(this.baseUrl + 'user/' + userId + '/photos/' + id);
+  }
+
 }
