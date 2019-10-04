@@ -40,13 +40,13 @@ namespace ProjectApp.API.Controllers
                 return BadRequest("Username already exists");
             }
 
-            var userToCreate = new User
-            {
-                Username = userToRegisterDto.Username
-            };
+            var userToCreate = _mapper.Map<User>(userToRegisterDto);
 
             var createdUser = await _repo.Register(userToCreate, userToRegisterDto.Password);
-            return StatusCode(201);
+
+            var userToReturn = _mapper.Map<UserForDetailedDto>(createdUser);
+
+            return CreatedAtRoute("GetUser", new {controller = "User", id = createdUser.Id}, userToReturn); //Getuser from user controller 
         }
 
         [HttpPost("login")]
