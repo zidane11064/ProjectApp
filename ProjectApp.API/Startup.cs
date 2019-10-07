@@ -48,6 +48,7 @@ namespace ProjectApp.API
             services.AddAutoMapper(typeof(ProjectRepository).Assembly);
             services.AddScoped<IAuthRepository, AuthRepository>(); //scoped created one instenace per http request. singleton or transient doesn't suit here.
             services.AddScoped<IProjectRepository, ProjectRepository>();
+            services.AddScoped<LogUserActivity>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         .AddJwtBearer(options => {options.TokenValidationParameters = new TokenValidationParameters{
                             ValidateIssuerSigningKey = true,
@@ -55,7 +56,7 @@ namespace ProjectApp.API
                             ValidateIssuer = false,
                             ValidateAudience = false
                         };
-                    });
+                    });        
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
