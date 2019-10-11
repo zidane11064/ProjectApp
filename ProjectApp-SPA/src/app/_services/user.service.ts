@@ -15,7 +15,7 @@ import { map } from 'rxjs/operators';
 
   constructor(private http: HttpClient) { }
 
-  getUsers(page?, itemsPerPage?, userParams?): Observable<PaginatedResult<User[]>> {
+  getUsers(page?, itemsPerPage?, userParams?, likesParams?): Observable<PaginatedResult<User[]>> {
     const paginatedResult: PaginatedResult<User[]> = new PaginatedResult<User[]>();
 
     let params = new HttpParams();
@@ -25,11 +25,19 @@ import { map } from 'rxjs/operators';
       params = params.append('pageSize', itemsPerPage);
     }
 
-    if(userParams != null) {
+    if (userParams != null) {
       params = params.append('minAge', userParams.minAge);
       params = params.append('maxAge', userParams.maxAge);
       params = params.append('gender', userParams.gender);
       params = params.append('orderBy', userParams.orderBy);
+    }
+
+    if (likesParams === 'Likers') {
+      params = params.append('likers', 'true');
+    }
+
+    if (likesParams === 'Likees') {
+      params = params.append('likees', 'true');
     }
 
     return this.http.get<User[]>(this.baseUrl + 'user', { observe: 'response', params })
@@ -37,7 +45,7 @@ import { map } from 'rxjs/operators';
         map(response => {
           paginatedResult.result = response.body;
           if (response.headers.get('Pagination') != null) {
-            paginatedResult.pegination = JSON.parse(response.headers.get('Pagination'))
+            paginatedResult.pegination = JSON.parse(response.headers.get('Pagination'));
           }
           return paginatedResult;
         })
@@ -58,6 +66,10 @@ import { map } from 'rxjs/operators';
 
   deletePhoto(userId: number, id: number) {
     return this.http.delete(this.baseUrl + 'user/' + userId + '/photos/' + id);
+  }
+
+  sendLike(id: number, recipientId: number) {
+    return this.http.post(this.baseUrl + 'user/' + id + '/like/' + recipientId, {});
   }
 
 }

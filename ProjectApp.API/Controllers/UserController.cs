@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using ProjectApp.API.Data;
 using ProjectApp.API.Dtos;
 using ProjectApp.API.Helpers;
+using ProjectApp.API.Models;
 
 namespace ProjectApp.API.Controllers
 {
@@ -75,6 +76,40 @@ namespace ProjectApp.API.Controllers
             }
             throw new Exception($"Updating user {id} failed on save") ;
 
+        }
+
+        [HttpPost("{id}/like/{recipientId}")]
+        public async Task<IActionResult> LikeUser (int id, int recipientId)
+        {
+            if (id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();    
+
+            var like = await _repo.GetLike(id, recipientId);
+
+            if (like!= null)
+            {
+                return BadRequest("You already liked the user");
+            }
+
+            if (await _repo.GetUser(recipientId) == null)
+            {
+                return NotFound();
+            }
+
+            like = new Like
+            {
+                LikerId = id,
+                LikeeId = recipientId
+            };
+
+            _repo.Add<Like>(like); //not updated to database yet so no need to use async
+
+            if (await _repo.SaveAll())
+            {
+                return Ok();
+            }
+
+            return BadRequest("Failed to like user");
         }
     }
 }
