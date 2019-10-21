@@ -32,12 +32,25 @@ namespace ProjectApp.API
 
         public IConfiguration Configuration { get; }
 
+        public void ConfigureDevelopmentService(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection"))); // can change to sqlite if use it in development mode
+
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionService(IServiceCollection services)
+        {
+            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection")));
+
+            ConfigureServices(services);
+        }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //ordering does not important here:
             //add objs in here so controller will be ready to inject
-            services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddJsonOptions(opt => {
                     opt.SerializerSettings.ReferenceLoopHandling = 
@@ -88,7 +101,14 @@ namespace ProjectApp.API
             //app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
-            app.UseMvc();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
+            app.UseMvc(routes => {
+                routes.MapSpaFallbackRoute(
+                    name: "spa-fallback",
+                    defaults: new {controller = "Fallback", action = "Index"}
+                );
+            });
         }
     }
 }

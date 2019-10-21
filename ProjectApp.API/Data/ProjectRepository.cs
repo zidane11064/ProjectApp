@@ -145,6 +145,7 @@ namespace ProjectApp.API.Data
             }
 
             messages = messages.OrderByDescending(d => d.MessageSent);
+            
             return await PagedList<Message>.CreatedAsync(messages, messageParams.PageNumber, messageParams.PageSize);
         }
 
