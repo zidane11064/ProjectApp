@@ -24,9 +24,9 @@ export class ListComponent implements OnInit {
   ngOnInit() {
     this.route.data.subscribe(data => {
       // tslint:disable-next-line: no-string-literal
-      this.users = data['users'].result;
+      this.users = data['users123'].result;
       // tslint:disable-next-line: no-string-literal
-      this.pagination = data['users'].pegination;
+      this.pagination = data['users123'].pagination;
       this.likesParams = 'Likers';
     });
   }
@@ -35,7 +35,7 @@ export class ListComponent implements OnInit {
     this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, null, this.likesParams)
       .subscribe((res: PaginatedResult<User[]>) => {
       this.users = res.result;
-      this.pagination = res.pegination;
+      this.pagination = res.pagination;
     }, error => {
       this.alertify.error(error);
     });

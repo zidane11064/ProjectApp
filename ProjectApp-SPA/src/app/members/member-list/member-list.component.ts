@@ -25,7 +25,7 @@ export class MemberListComponent implements OnInit {
       // tslint:disable-next-line: no-string-literal
       this.users = data['users'].result;
       // tslint:disable-next-line: no-string-literal
-      this.pagination = data['users'].pegination;
+      this.pagination = data['users'].pagination;
     });
     this.userParams.gender = this.user.gender === 'female' ? 'male' : 'female';
     this.userParams.minAge = 18;
@@ -49,7 +49,7 @@ export class MemberListComponent implements OnInit {
     this.userService.getUsers(this.pagination.currentPage, this.pagination.itemsPerPage, this.userParams)
       .subscribe((res: PaginatedResult<User[]>) => {
       this.users = res.result;
-      this.pagination = res.pegination;
+      this.pagination = res.pagination;
     }, error => {
       this.alertify.error(error);
     });

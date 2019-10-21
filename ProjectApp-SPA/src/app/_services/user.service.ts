@@ -46,7 +46,7 @@ import { Message } from '../_model/message';
         map(response => {
           paginatedResult.result = response.body;
           if (response.headers.get('Pagination') != null) {
-            paginatedResult.pegination = JSON.parse(response.headers.get('Pagination'));
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
           }
           return paginatedResult;
         })
@@ -90,12 +90,29 @@ import { Message } from '../_model/message';
         map(response => {
           paginatedResult.result = response.body;
           if (response.headers.get('Pagination') != null) {
-            paginatedResult.pegination = JSON.parse(response.headers.get('Pagination'));
+            paginatedResult.pagination = JSON.parse(response.headers.get('Pagination'));
           }
 
           return paginatedResult;
         })
       );
+  }
+
+  getMessageThread(id: number, recipientId: number) {
+    return this.http.get<Message[]>(this.baseUrl + 'user/' + id + '/messages/thread/' + recipientId);
+  }
+
+  sendMessage(id: number, message: Message) {
+    return this.http.post(this.baseUrl + 'user/' + id + '/messages', message);
+  }
+
+  deleteMessage(id: number, userId: number) {
+    return this.http.post(this.baseUrl + 'user/' + userId + '/messages/' + id, {});
+  }
+
+  markAsRead(userId: number, messageId: number) {
+    this.http.post(this.baseUrl + 'user/' + userId + '/messages/' + messageId + '/read', {})
+      .subscribe();
   }
 
 }
