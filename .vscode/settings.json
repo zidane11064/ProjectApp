@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6612f784-74c5-4c63-bf40-6380e63ab39a/resourceGroups/ProjectAppResourceGroup/providers/Microsoft.Web/sites/ProjectApp1",
+    "appService.deploySubpath": "ProjectApp.API\\bin\\Release\\netcoreapp2.2\\publish"
+}

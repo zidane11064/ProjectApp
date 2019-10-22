@@ -32,14 +32,14 @@ namespace ProjectApp.API
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureDevelopmentService(IServiceCollection services)
+        public void ConfigureDevelopmentServices(IServiceCollection services)  // must be exact: ConfigureDevelopmentServices
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection"))); // can change to sqlite if use it in development mode
 
             ConfigureServices(services);
         }
 
-        public void ConfigureProductionService(IServiceCollection services)
+        public void ConfigureProductionServices(IServiceCollection services)  // must be exact: ConfigureProductionServices
         {
             services.AddDbContext<DataContext>(x => x.UseSqlServer(Configuration.GetConnectionString("test123DBConnection")));
 
@@ -82,7 +82,7 @@ namespace ProjectApp.API
             else
             {
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                //app.UseHsts();
+                app.UseHsts();
                 app.UseExceptionHandler(builder => {
                     builder.Run(async context => {
                         context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
@@ -97,8 +97,11 @@ namespace ProjectApp.API
                     });
                 });
             }
+            //for Azure test only:
+            //app.UseDeveloperExceptionPage();
+            
 
-            //app.UseHttpsRedirection();
+            app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseAuthentication();
             app.UseDefaultFiles();
