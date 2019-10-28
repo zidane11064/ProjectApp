@@ -16,7 +16,6 @@ namespace ProjectApp.API.Controllers
 {
     [Authorize]
     [Route("api/user/{userId}/photos")]
-    [ApiController]
 
     public class PhotosController : ControllerBase
     {
@@ -58,7 +57,7 @@ namespace ProjectApp.API.Controllers
             if (userID != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var userFromRepo = await _repo.GetUser(userID);
+            var userFromRepo = await _repo.GetUser(userID, true);
 
             var file = photoForCreationDto.File;
 
@@ -105,7 +104,7 @@ namespace ProjectApp.API.Controllers
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var user = await _repo.GetUser(userId);
+            var user = await _repo.GetUser(userId, true);
 
             if (!user.Photos.Any(p => p.Id == id))
             {
@@ -137,7 +136,7 @@ namespace ProjectApp.API.Controllers
             if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
-            var user = await _repo.GetUser(userId);
+            var user = await _repo.GetUser(userId, true);
 
             if (!user.Photos.Any(p => p.Id == id))
             {

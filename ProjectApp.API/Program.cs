@@ -1,10 +1,12 @@
 ﻿using System;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProjectApp.API.Data;
+using ProjectApp.API.Models;
 
 namespace ProjectApp.API
 {
@@ -19,8 +21,10 @@ namespace ProjectApp.API
                 try
                 {
                     var context = services.GetRequiredService<DataContext>();
+                    var userManager = services.GetRequiredService<UserManager<User>>();
+                    var roleManager = services.GetRequiredService<RoleManager<Role>>();
                     context.Database.Migrate(); //dont have to type "dotnet ef database update", still need to prepare migration first
-                    Seed.SeedUsers(context);
+                    Seed.SeedUsers(userManager, roleManager);
                 }
                 catch (Exception ex)
                 {                    

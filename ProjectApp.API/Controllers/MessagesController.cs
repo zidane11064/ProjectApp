@@ -13,7 +13,6 @@ using ProjectApp.API.Models;
 namespace ProjectApp.API.Controllers
 {
     [ServiceFilter(typeof(LogUserActivity))]
-    [Authorize]
     [Route("api/user/{userId}/[controller]")]
     [ApiController]
     public class MessagesController : ControllerBase
@@ -76,14 +75,14 @@ namespace ProjectApp.API.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateMessage(int userId, MessageForCreateionDto messageForCreateionDto)
         {
-            var sender = await _repo.GetUser(userId); //create sender variable to give auto mapper a hint to map messageToReturnDto
+            var sender = await _repo.GetUser(userId, false); //create sender variable to give auto mapper a hint to map messageToReturnDto
             
             if (sender.Id != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
                 return Unauthorized();
 
             messageForCreateionDto.SenderId = userId;
 
-            var recipient = await _repo.GetUser(messageForCreateionDto.RecipientId);
+            var recipient = await _repo.GetUser(messageForCreateionDto.RecipientId, true);
 
             if (recipient == null)
             {

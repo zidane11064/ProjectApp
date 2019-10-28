@@ -9,7 +9,6 @@ using ProjectApp.API.Data;
 
 namespace ProjectApp.API.Controllers
 {
-    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase //use controllerbase rather than controller is b/c controllerbase doesnt support view. For this project, view will come from Angular.
@@ -20,7 +19,8 @@ namespace ProjectApp.API.Controllers
             _context = context;
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
+        // [Authorize(Roles = "Admin, Moderator")]  // role based authorization
         // GET api/values
         [HttpGet]
         public async Task<IActionResult> GetValues()
